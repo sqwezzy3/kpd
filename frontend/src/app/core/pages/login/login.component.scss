@@ -1,0 +1,148 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  background: #05070a;
+  color: #f8fafc;
+}
+
+.login-shell {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.login-visual {
+  position: relative;
+  padding: 3rem;
+  display: flex;
+  align-items: flex-end;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(20, 184, 166, 0.28), transparent 42%),
+    linear-gradient(145deg, #071018 0%, #0b1220 55%, #05070a 100%);
+}
+
+.glow {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(40px);
+  opacity: 0.55;
+  animation: drift 12s ease-in-out infinite alternate;
+}
+
+.glow-a {
+  width: 280px;
+  height: 280px;
+  left: 12%;
+  top: 18%;
+  background: #14b8a6;
+}
+
+.glow-b {
+  width: 340px;
+  height: 340px;
+  right: 10%;
+  bottom: 12%;
+  background: #0369a1;
+  animation-delay: -4s;
+}
+
+.brand-mark {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.brand-name {
+  font-size: clamp(3.5rem, 8vw, 6rem);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+}
+
+.brand-tag {
+  max-width: 16rem;
+  color: rgba(248, 250, 252, 0.72);
+  font-size: 1rem;
+}
+
+.form-wrapper {
+  position: relative;
+  padding: 2rem;
+  background: rgba(9, 9, 11, 0.92);
+  border-left: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.form-container {
+  width: min(100%, 320px);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.title {
+  color: var(--p-primary-color);
+  text-align: center;
+  margin-bottom: 0.25rem;
+}
+
+.mode-switch {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  color: rgba(248, 250, 252, 0.65);
+}
+
+.link-btn {
+  border: 0;
+  background: transparent;
+  color: var(--p-primary-color);
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}
+
+:host ::ng-deep {
+  .p-password,
+  .p-password-input,
+  .p-inputtext {
+    width: 100% !important;
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(24px, -18px, 0) scale(1.08);
+  }
+}
+
+@media (max-width: 900px) {
+  .login-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .login-visual {
+    min-height: 36vh;
+    align-items: center;
+  }
+
+  .form-wrapper {
+    border-left: 0;
+    border-top: 1px solid rgba(148, 163, 184, 0.12);
+  }
+}

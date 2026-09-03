@@ -1,0 +1,117 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.application-container {
+  display: flex;
+  min-height: 100vh;
+  background: var(--surface-ground);
+}
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  padding: 1.5rem 1rem;
+  border-right: 1px solid color-mix(in srgb, var(--p-content-border-color) 80%, transparent);
+  background: color-mix(in srgb, var(--p-content-background) 88%, transparent);
+}
+
+.sidebar-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  margin-bottom: 2rem;
+  padding: 0 0.75rem;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: var(--p-primary-color);
+}
+
+.logo-sub {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--p-text-muted-color);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.nav-link {
+  display: block;
+  padding: 0.7rem 0.85rem;
+  border-radius: 0.65rem;
+  color: inherit;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background: color-mix(in srgb, var(--p-primary-color) 14%, transparent);
+  color: var(--p-primary-color);
+}
+
+.app-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--p-content-border-color) 80%, transparent);
+}
+
+.header-title {
+  font-weight: 700;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.username {
+  font-size: 0.9rem;
+  color: var(--p-text-muted-color);
+}
+
+.outlet {
+  padding: 1.5rem;
+}
+
+:host ::ng-deep .header-avatar {
+  background: var(--p-primary-color);
+  color: var(--p-primary-contrast-color);
+}
+
+@media (max-width: 800px) {
+  .application-container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--p-content-border-color) 80%, transparent);
+  }
+
+  .username {
+    display: none;
+  }
+}

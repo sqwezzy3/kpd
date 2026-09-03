@@ -1,0 +1,55 @@
+<div class="profile-page">
+  <div class="page-header">
+    <div>
+      <h1>Профиль</h1>
+      <p>Данные текущего пользователя из REST API</p>
+    </div>
+    <p-button
+      label="Выйти"
+      severity="secondary"
+      [outlined]="true"
+      icon="pi pi-sign-out"
+      (onClick)="logout()" />
+  </div>
+
+  @if (loading()) {
+    <p-card styleClass="profile-card">
+      <p>Загрузка…</p>
+    </p-card>
+  } @else if (user(); as currentUser) {
+    <p-card styleClass="profile-card">
+      <div class="profile-body">
+        <p-avatar
+          [label]="initials(currentUser)"
+          shape="circle"
+          size="xlarge"
+          styleClass="profile-avatar" />
+
+        <div class="profile-meta">
+          <div class="name-row">
+            <h2>{{ currentUser.name }}</h2>
+            <p-tag value="Активен" severity="success" />
+          </div>
+          <div class="meta-grid">
+            <div>
+              <span class="label">Email</span>
+              <span class="value">{{ currentUser.email }}</span>
+            </div>
+            <div>
+              <span class="label">ID</span>
+              <span class="value mono">{{ currentUser.id }}</span>
+            </div>
+            <div>
+              <span class="label">Создан</span>
+              <span class="value">{{ currentUser.createdAt | date: 'dd.MM.yyyy HH:mm' }}</span>
+            </div>
+            <div>
+              <span class="label">Обновлён</span>
+              <span class="value">{{ currentUser.updatedAt | date: 'dd.MM.yyyy HH:mm' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </p-card>
+  }
+</div>

@@ -1,0 +1,43 @@
+<div class="application-container">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <span class="logo">KPD</span>
+      <span class="logo-sub">Trends</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        routerLink="/profile"
+        routerLinkActive="active"
+        class="nav-link">
+        Профиль
+      </a>
+    </nav>
+  </aside>
+
+  <div class="app-content">
+    <header class="header">
+      <div class="header-title">Кабинет</div>
+      <div class="header-actions">
+        @if (authService.user(); as user) {
+          <span class="username">{{ user.email }}</span>
+          <p-avatar
+            [label]="user.name.charAt(0).toUpperCase()"
+            shape="circle"
+            styleClass="header-avatar" />
+        }
+        <p-button
+          icon="pi pi-sign-out"
+          [rounded]="true"
+          [text]="true"
+          severity="secondary"
+          (onClick)="logout()"
+          aria-label="Выйти" />
+      </div>
+    </header>
+
+    <main class="outlet">
+      <router-outlet />
+    </main>
+  </div>
+</div>

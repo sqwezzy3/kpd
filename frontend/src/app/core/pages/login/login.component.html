@@ -1,0 +1,96 @@
+<div class="login-shell">
+  <div class="login-visual" aria-hidden="true">
+    <div class="glow glow-a"></div>
+    <div class="glow glow-b"></div>
+    <div class="brand-mark">
+      <span class="brand-name">KPD</span>
+      <span class="brand-tag">TikTok Trends Analytics</span>
+    </div>
+  </div>
+
+  <div class="form-wrapper full-center">
+    <div class="form-container">
+      @if (sharedError()) {
+        <p-message severity="error" styleClass="w-full mb-3">
+          {{ sharedError() }}
+        </p-message>
+      }
+
+      <div class="title text-xl font-semibold">
+        {{ isRegister ? 'Регистрация' : 'Авторизация' }}
+      </div>
+
+      <form [formGroup]="form" class="flex flex-col mb-4 w-full" (ngSubmit)="submit()">
+        @if (isRegister) {
+          <div class="field">
+            <p-floatlabel>
+              <input
+                pSize="large"
+                id="name"
+                type="text"
+                pInputText
+                formControlName="name" />
+              <label for="name">Имя</label>
+            </p-floatlabel>
+            @if (form.controls.name.touched && form.controls.name.invalid) {
+              <div class="field-error">Укажите имя (не менее 2 символов)</div>
+            }
+          </div>
+        }
+
+        <div class="field">
+          <p-floatlabel>
+            <input
+              pSize="large"
+              id="email"
+              type="text"
+              pInputText
+              formControlName="email" />
+            <label for="email">Email</label>
+          </p-floatlabel>
+          @if (form.controls.email.touched && form.controls.email.invalid) {
+            <div class="field-error">Укажите корректный email</div>
+          }
+        </div>
+
+        <div class="field">
+          <p-floatlabel>
+            <p-password
+              formControlName="password"
+              inputId="password"
+              size="large"
+              [toggleMask]="true"
+              [feedback]="false"
+              styleClass="w-full"
+              inputStyleClass="w-full" />
+            <label for="password">Пароль</label>
+          </p-floatlabel>
+          @if (form.controls.password.touched && form.controls.password.invalid) {
+            <div class="field-error">Пароль должен содержать не менее 8 символов</div>
+          }
+        </div>
+      </form>
+
+      <p-button
+        class="w-full"
+        styleClass="w-full"
+        [loading]="loading()"
+        [label]="isRegister ? 'Создать аккаунт' : 'Войти'"
+        (onClick)="submit()" />
+
+      <div class="mode-switch">
+        @if (isRegister) {
+          <span>Уже есть аккаунт?</span>
+          <button type="button" class="link-btn" (click)="switchMode('login')">
+            Войти
+          </button>
+        } @else {
+          <span>Нет аккаунта?</span>
+          <button type="button" class="link-btn" (click)="switchMode('register')">
+            Зарегистрироваться
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</div>
