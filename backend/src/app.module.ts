@@ -3,8 +3,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module.js';
 import { UsersModule } from './users/users.module.js';
+import { FilesModule } from './files/files.module.js';
 import { HealthController } from './health.controller.js';
 import { User } from './users/entities/user.entity.js';
+import { StoredFile } from './files/entities/stored-file.entity.js';
 
 @Module({
   imports: [
@@ -21,13 +23,14 @@ import { User } from './users/entities/user.entity.js';
         username: configService.get<string>('DB_USER', 'kpd'),
         password: configService.get<string>('DB_PASSWORD', 'kpd'),
         database: configService.get<string>('DB_NAME', 'kpd'),
-        entities: [User],
+        entities: [User, StoredFile],
         synchronize: configService.get<string>('DB_SYNC', 'true') === 'true',
         logging: configService.get<string>('DB_LOGGING', 'false') === 'true',
       }),
     }),
     UsersModule,
     AuthModule,
+    FilesModule,
   ],
   controllers: [HealthController],
 })

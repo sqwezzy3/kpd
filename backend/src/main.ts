@@ -35,6 +35,7 @@ async function bootstrap() {
     )
     .addTag('auth')
     .addTag('users')
+    .addTag('files')
     .addTag('health')
     .build();
 

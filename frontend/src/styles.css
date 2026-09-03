@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @import 'normalize.css';
 @import '@openng/icons/openng-icons.css';
+@import '@fontsource/manrope/400.css';
+@import '@fontsource/manrope/600.css';
+@import '@fontsource/manrope/700.css';
+@import '@fontsource/manrope/800.css';
 
 :root {
   --surface-ground: #f4f6f8;

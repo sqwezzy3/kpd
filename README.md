@@ -4,9 +4,9 @@
 
 ## Структура
 
-- `backend/` — NestJS API (auth + users)
+- `backend/` — NestJS API (auth + users + files/MinIO)
 - `frontend/` — Angular 22 + Optimus UI (login / profile), nginx отдаёт build
-- `docker-compose.yml` — web + API + PostgreSQL
+- `docker-compose.yml` — web + API + PostgreSQL + MinIO
 
 ## Как поднять
 
@@ -21,6 +21,8 @@ docker compose up --build
 - API напрямую: http://localhost:4000/api  
 - Swagger: http://localhost:4000/api/docs  
 - Postgres: `localhost:5432` (user/pass/db: `kpd`)
+- MinIO API: http://localhost:9000  
+- MinIO Console: http://localhost:9001 (`minioadmin` / `minioadmin`)
 
 nginx проксирует `/api` → backend. Порт UI: `UI_PORT` в `.env` (по умолчанию `80`).
 
@@ -79,6 +81,24 @@ npm run start:dev
 | `POST` | `/api/auth/login` | Вход |
 | `GET` | `/api/users/me` | Текущий пользователь (Bearer JWT) |
 | `GET` | `/api/health` | Healthcheck |
+
+## Files API (только с JWT, почанковая загрузка до 1 ГБ)
+
+| Method | Path | Описание |
+|--------|------|----------|
+| `POST` | `/api/files/uploads` | Старт загрузки `{ originalName, size, mimeType?, chunkSize? }` |
+| `PUT` | `/api/files/uploads/:id/chunks/:index` | Чанк (`multipart`, поле `chunk`) |
+| `POST` | `/api/files/uploads/:id/complete` | Собрать файл |
+| `GET` | `/api/files/uploads/:id` | Статус загрузки |
+| `DELETE` | `/api/files/uploads/:id` | Отменить загрузку |
+| `GET` | `/api/files` | Список готовых файлов |
+| `GET` | `/api/files/:id` | Метаданные |
+| `GET` | `/api/files/:id/download` | Скачивание |
+| `GET` | `/api/files/:id/view` | Просмотр (inline) |
+| `PATCH` | `/api/files/:id/rename` | Переименование `{ "name": "..." }` |
+| `DELETE` | `/api/files/:id` | Удаление |
+
+Чанк по умолчанию 8 МБ. Если чанков больше одного — размер чанка ≥ 5 МБ (требование MinIO compose).
 
 ### Примеры
 
