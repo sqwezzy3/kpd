@@ -96,7 +96,7 @@ export class LoginComponent {
               : 'Аккаунт создан',
         });
         const redirectTo =
-          this.route.snapshot.queryParamMap.get('redirectTo') || '/profile';
+          this.route.snapshot.queryParamMap.get('redirectTo') || '/files';
         void this.router.navigateByUrl(redirectTo);
       },
       error: (error) => {

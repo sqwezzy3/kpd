@@ -1,0 +1,197 @@
+<div class="files-page">
+  <div class="page-header">
+    <div>
+      <h1>Файлы</h1>
+      <p>Хранилище до 1 ГБ на файл, загрузка чанками</p>
+    </div>
+
+    <div class="header-actions">
+      <p-button
+        label="Обновить"
+        severity="secondary"
+        [outlined]="true"
+        icon="pi pi-refresh"
+        [loading]="loading()"
+        (onClick)="reload()" />
+
+      <input
+        #fileInput
+        class="file-input"
+        type="file"
+        multiple
+        (change)="onFileInputChange($event)" />
+
+      <p-button
+        label="Загрузить"
+        icon="pi pi-upload"
+        (onClick)="fileInput.click()" />
+    </div>
+  </div>
+
+  @if (uploads().length) {
+    <p-card styleClass="uploads-card">
+      <div class="uploads-list">
+        @for (item of uploads(); track item.id) {
+          <div class="upload-item">
+            <div class="upload-meta">
+              <span class="upload-name">{{ item.fileName }}</span>
+              @switch (item.status) {
+                @case ('uploading') {
+                  <p-tag severity="info" [value]="'Загрузка ' + item.progress + '%'" />
+                }
+                @case ('completing') {
+                  <p-tag severity="warn" value="Сборка…" />
+                }
+                @case ('done') {
+                  <p-tag severity="success" value="Готово" />
+                }
+                @case ('error') {
+                  <p-tag severity="danger" value="Ошибка" />
+                }
+              }
+            </div>
+            <p-progressbar [value]="item.progress" [showValue]="false" />
+            @if (item.error) {
+              <div class="upload-error">{{ item.error }}</div>
+            }
+          </div>
+        }
+      </div>
+    </p-card>
+  }
+
+  <p-card styleClass="files-card">
+    <p-table
+      [value]="files()"
+      [loading]="loading()"
+      dataKey="id"
+      [rowHover]="true"
+      styleClass="files-table"
+      [tableStyle]="{ 'min-width': '56rem' }">
+      <ng-template #header>
+        <tr>
+          <th>Имя</th>
+          <th style="width: 8rem">Размер</th>
+          <th style="width: 12rem">Тип</th>
+          <th style="width: 11rem">Создан</th>
+          <th style="width: 14rem">Действия</th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-file>
+        <tr>
+          <td>
+            <div class="file-name">{{ file.originalName }}</div>
+          </td>
+          <td>{{ formatBytes(file.size) }}</td>
+          <td>
+            <span class="mime">{{ file.mimeType }}</span>
+          </td>
+          <td>{{ file.createdAt | date: 'dd.MM.yyyy HH:mm' }}</td>
+          <td>
+            <div class="row-actions">
+              <p-button
+                icon="pi pi-eye"
+                [rounded]="true"
+                [text]="true"
+                severity="secondary"
+                [disabled]="isBusy(file.id)"
+                (onClick)="view(file)"
+                aria-label="Просмотр" />
+              <p-button
+                icon="pi pi-download"
+                [rounded]="true"
+                [text]="true"
+                severity="secondary"
+                [disabled]="isBusy(file.id)"
+                (onClick)="download(file)"
+                aria-label="Скачать" />
+              <p-button
+                icon="pi pi-pencil"
+                [rounded]="true"
+                [text]="true"
+                severity="secondary"
+                [disabled]="isBusy(file.id)"
+                (onClick)="openRename(file)"
+                aria-label="Переименовать" />
+              <p-button
+                icon="pi pi-trash"
+                [rounded]="true"
+                [text]="true"
+                severity="danger"
+                [disabled]="isBusy(file.id)"
+                (onClick)="openDelete(file)"
+                aria-label="Удалить" />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="5">
+            <div class="empty-state">
+              Пока нет файлов. Нажмите «Загрузить», чтобы добавить первый.
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+</div>
+
+<p-dialog
+  header="Переименовать файл"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '26rem' }"
+  [visible]="renameVisible()"
+  (visibleChange)="renameVisible.set($event)">
+  <div class="dialog-body">
+    <label for="rename-input">Новое имя</label>
+    <input
+      id="rename-input"
+      pInputText
+      class="w-full"
+      [ngModel]="renameName()"
+      (ngModelChange)="renameName.set($event)" />
+  </div>
+  <ng-template #footer>
+    <p-button
+      label="Отмена"
+      severity="secondary"
+      [text]="true"
+      (onClick)="renameVisible.set(false)" />
+    <p-button
+      label="Сохранить"
+      (onClick)="confirmRename()"
+      [disabled]="!renameName().trim()" />
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  header="Удалить файл?"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '26rem' }"
+  [visible]="deleteVisible()"
+  (visibleChange)="deleteVisible.set($event)">
+  <div class="dialog-body">
+    @if (deleteTarget(); as target) {
+      <p>
+        Удалить «{{ target.originalName }}»? Это действие нельзя отменить.
+      </p>
+    }
+  </div>
+  <ng-template #footer>
+    <p-button
+      label="Отмена"
+      severity="secondary"
+      [text]="true"
+      (onClick)="deleteVisible.set(false)" />
+    <p-button
+      label="Удалить"
+      severity="danger"
+      (onClick)="confirmDelete()" />
+  </ng-template>
+</p-dialog>

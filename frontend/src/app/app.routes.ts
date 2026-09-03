@@ -17,7 +17,14 @@ export const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'profile',
+        redirectTo: 'files',
+      },
+      {
+        path: 'files',
+        loadComponent: () =>
+          import('./core/pages/files/files.component').then(
+            (m) => m.FilesComponent,
+          ),
       },
       {
         path: 'profile',
@@ -30,6 +37,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'profile',
+    redirectTo: 'files',
   },
 ];

@@ -34,11 +34,10 @@ src/app/
     models/
     pages/
       login/
+      files/      # хранилище (upload/list/view/download/rename/delete)
       profile/
     services/
     utils/
   layout/
   shared/theme/
-Dockerfile
-nginx.conf
 ```

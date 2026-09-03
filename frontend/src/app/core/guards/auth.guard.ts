@@ -35,7 +35,7 @@ export const guestGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   if (tokens.getAccessToken()) {
-    return router.createUrlTree(['/profile']);
+    return router.createUrlTree(['/files']);
   }
 
   return true;
