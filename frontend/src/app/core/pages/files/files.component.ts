@@ -20,7 +20,7 @@ import type { StoredFile, UploadProgressItem } from '../../models/file.model';
 import { extractApiErrorMessage } from '../../utils/api-error';
 import { formatBytes } from '../../utils/format-bytes';
 
-const MAX_FILE_SIZE = 1024 * 1024 * 1024;
+const MAX_FILE_SIZE = 10 * 1024 * 1024 * 1024;
 
 @Component({
   selector: 'app-files',
@@ -105,7 +105,7 @@ export class FilesComponent implements OnInit {
       this.messageService.add({
         severity: 'warn',
         summary: 'Слишком большой файл',
-        detail: `«${file.name}» превышает 1 ГБ`,
+        detail: `«${file.name}» превышает 10 ГБ`,
       });
       return;
     }

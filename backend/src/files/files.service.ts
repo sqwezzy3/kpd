@@ -23,7 +23,7 @@ export type UploadedChunkFile = {
 /** MinIO compose требует ≥ 5 MiB для всех частей, кроме последней */
 const MIN_COMPOSE_CHUNK_SIZE = 5 * 1024 * 1024;
 const DEFAULT_CHUNK_SIZE = 8 * 1024 * 1024;
-const MAX_FILE_SIZE_BYTES = 1024 * 1024 * 1024;
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024 * 1024;
 
 @Injectable()
 export class FilesService {
@@ -37,7 +37,7 @@ export class FilesService {
     configService: ConfigService,
   ) {
     const maxMb = Number(
-      configService.get<string>('MAX_FILE_SIZE_MB', '1024'),
+      configService.get<string>('MAX_FILE_SIZE_MB', '10240'),
     );
     this.maxFileSizeBytes = Math.min(
       maxMb * 1024 * 1024,

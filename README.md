@@ -82,7 +82,7 @@ npm run start:dev
 | `GET` | `/api/users/me` | Текущий пользователь (Bearer JWT) |
 | `GET` | `/api/health` | Healthcheck |
 
-## Files API (только с JWT, почанковая загрузка до 1 ГБ)
+## Files API (только с JWT, почанковая загрузка до 10 ГБ)
 
 | Method | Path | Описание |
 |--------|------|----------|
