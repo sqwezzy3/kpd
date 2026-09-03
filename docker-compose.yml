@@ -1,0 +1,57 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: kpd-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-kpd}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-kpd}
+      POSTGRES_DB: ${DB_NAME:-kpd}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - kpd_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-kpd} -d ${DB_NAME:-kpd}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development
+    container_name: kpd-api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 4000
+      CHOKIDAR_USEPOLLING: "true"
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: ${DB_USER:-kpd}
+      DB_PASSWORD: ${DB_PASSWORD:-kpd}
+      DB_NAME: ${DB_NAME:-kpd}
+      DB_SYNC: ${DB_SYNC:-true}
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production-use-long-secret}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:4200}
+    ports:
+      - "${API_PORT:-4000}:4000"
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/nest-cli.json:/app/nest-cli.json:ro
+      - ./backend/tsconfig.json:/app/tsconfig.json:ro
+      - ./backend/tsconfig.build.json:/app/tsconfig.build.json:ro
+    develop:
+      watch:
+        - action: rebuild
+          path: ./backend/package.json
+        - action: rebuild
+          path: ./backend/package-lock.json
+
+volumes:
+  kpd_pg_data:

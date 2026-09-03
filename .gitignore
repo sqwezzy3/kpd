@@ -1,0 +1,11 @@
+node_modules/
+dist/
+coverage/
+.env
+*.log
+.DS_Store
+.idea/workspace.xml
+.idea/shelf/
+backend/dist/
+frontend/dist/
+frontend/node_modules/
